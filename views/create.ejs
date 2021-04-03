@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body style="background-color: rgb(136, 98, 241);">
+    <div class="head-container">
+      <nav
+        class="navbar"
+        style="
+          color: rgba(255, 255, 255, 0.959);
+          background-color: rgb(0, 0, 124);
+        "
+      >
+        <a class="navbar-brand text-light" style="font-size: 2rem" href="/memes"
+          >Memes4u</a
+        >
+      </nav>
+    </div>
+
+      <br /><br /><br /><br />
+
+      <div class="form-container d-flex flex-column align-items-center">
+        <form style="width: 50%; background-color: white;" class="create-form p-4" id="create-form">
+          <div class="form-group">
+            <label for="caption">Caption</label>
+            <input
+              type="text"
+              placeholder="Be creative with your caption"
+              class="form-control"
+              id="caption"
+            />
+          </div>
+          <div class="form-group">
+            <label for="meme-url">Meme URL</label>
+            <input
+              type="text"
+              placeholder="Enter url of your meme here"
+              class="form-control"
+              id="meme-url"
+            />
+          </div>
+          <div class="form-group d-flex flex-column align-items-center pb-4">
+            <button type="submit" class="btn btn-primary">Submit Meme</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+      if (localStorage.getItem("token") == null) {
+        window.location.pathname = "/login";
+      }
+
+      const form = document.getElementById("create-form");
+      form.addEventListener("submit", createMeme);
+
+      async function createMeme(e) {
+        e.preventDefault();
+
+        const username = localStorage.getItem("username");
+        const caption = document.getElementById("caption").value;
+        const url = document.getElementById("meme-url").value;
+
+        const response = await fetch("/memes", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            caption,
+            url,
+          }),
+        }).then((res) => res.json());
+
+        if (response.status === "ok") {
+          window.location.pathname = "/memes";
+        } else if (response.status === "error") {
+          alert(response.error);
+          location.reload();
+        }
+      }
+    </script>
+
+    <%- include("./partials/scripts.ejs") %>
+  </body>
+</html>

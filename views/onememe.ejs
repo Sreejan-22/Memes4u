@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body>
+    <!-- <nav>
+      <div class="head-container">
+        <h1 class="head-text">XMeme</h1>
+      </div>
+    </nav> -->
+    <div class="fixed-component">
+      <nav class="navbar" style="color: rgba(255, 255, 255, 0.959)">
+        <a class="navbar-brand text-light text-xl-start" href="/memes"
+          >Memes4u</a
+        >
+      </nav>
+    </div>
+
+    <hr />
+
+    <!-- Single meme that matches the id in the req url -->
+
+    <div class="all-memes">
+      <% if(meme !== undefined) { %>
+      <div class="meme-container">
+        <div class="meme-owner"><p><%= meme.name %></p></div>
+        <div class="meme-caption"><p><%= meme.caption %></p></div>
+        <img src="<%= meme.url %>" alt="" />
+      </div>
+      <hr />
+      <% } %>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

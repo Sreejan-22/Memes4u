@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body style="background-color: rgb(136, 98, 241)">
+    <div class="fixed-component">
+      <nav class="navbar" style="color: rgba(255, 255, 255, 0.959)">
+        <a class="navbar-brand text-light" style="font-size: 2rem" href="/memes"
+          >Memes4u</a
+        >
+      </nav>
+      <div class="d-flex">
+        <div
+          class="dropdown"
+          style="padding-top: 11px; margin-right: 5px; color: gold"
+          id="dropdown-item"
+        >
+          <div
+            class="dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            current_user
+          </div>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" id="logout-button">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% function time(val) { %>
+    <!--  -->
+    <% let date = Date.parse(val.toString()); %>
+    <!--  -->
+    <% date = new Date(date); %>
+    <!--  -->
+    <% const now = new Date(); %>
+    <!--  -->
+    <% let diff = (now - date) / 1000; %>
+    <!--  -->
+    <% const monthNames = ["January", "February", "March", "April", "May",
+    "June", "July", "August", "September", "October", "November", "December"];
+    %>
+    <!--  -->
+    <% if(now.getFullYear() !== date.getFullYear()) { %>
+    <!--  -->
+    <% return (`${date.getDate()}th ${monthNames[date.getMonth()]}
+    ${date.getFullYear}`); %>
+    <!--  -->
+    <% } else { %> <% let day = date.getDate(); %>
+    <!--  -->
+    <% let month = date.getMonth(); %>
+    <!--  -->
+    <% let hours = date.getHours(); %>
+    <!--  -->
+    <% hours = hours < 10 ? "0" + hours : hours; %>
+    <!--  -->
+    <% %> <% let minutes = date.getMinutes(); %>
+    <!--  -->
+    <% minutes = minutes < 10 ? "0" + minutes : minutes ; %>
+    <!--  -->
+    <% if(hours > 12) { %>
+    <!--  -->
+    <% return (`${day}th ${monthNames[month]} at ${hours - 12}:${minutes} PM`);
+    %>
+    <!--  -->
+    <% } else { %>
+    <!--  -->
+    <% return(`${day}th ${monthNames[month]} at ${hours}:${minutes} AM`); %>
+    <!--  -->
+    <% } %>
+    <!--  -->
+    <% } %>
+    <!--  -->
+    <% } %>
+
+    <!-- Meme Content -->
+    <div class="memes-wrapper">
+      <div class="all-memes">
+        <% let index = 0; %> <% if(memes.length > 0) { %> <% for(let meme of
+        memes) { %> <% index = index + 1; %> <% %>
+        <div class="meme-container" id="meme_container_<%= index %>">
+          <div class="meme-owner" id="meme_owner_<%= index %>">
+            <p>
+              <span style="font-size: 1.2em; font-weight: bold; cursor: pointer"
+                ><%= meme.name %></span
+              >
+              <br class="line-break" />
+              <span class="dot" style="color: rgb(91, 112, 131)">&#8226;</span>
+              <span class="time-text" style="color: rgb(91, 112, 131)"
+                ><%= time(meme.createdAt) %></span
+              >
+            </p>
+          </div>
+          <div class="meme-caption" id="meme_caption_<%= index %>">
+            <p><%= meme.caption %></p>
+          </div>
+          <img
+            src="<%= meme.url %>"
+            alt=""
+            class="meme-img"
+            id="meme_img_<%= index %>"
+          />
+          <div
+            class="delete-button-wrapper d-flex justify-content-end"
+            id="div_<%= index %>"
+          >
+            <button
+              class="delete-button mt-2 mr-2 btn btn-outline-danger"
+              id="<%= meme._id %>"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+        <hr />
+        <% } %> <% } %>
+      </div>
+    </div>
+
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+      // function myfunc() {
+      //   console.log("button was clicked");
+      // }
+      const showUser = document.getElementById("dropdownMenuButton");
+      showUser.innerText = localStorage.getItem("username");
+
+      // delete a meme
+      let buttons = document.getElementsByClassName("delete-button");
+      // console.log(buttons);
+
+      for (let button of buttons) {
+        button.addEventListener("click", deleteMeme);
+
+        async function deleteMeme(e) {
+          // e.preventDefault();
+          const id = button.getAttribute("id");
+          // console.log(id);
+          // console.log(e.target);
+          let shouldDelete = confirm(
+            "Are you sure you want to delete this meme?"
+          );
+          if (shouldDelete == true) {
+            const response = await fetch(`/delete/${id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+              },
+            }).then((res) => res.json());
+
+            if (response.status === "ok") {
+              location.reload();
+            } else {
+              alert("An error occurred");
+            }
+          } else {
+            return;
+          }
+        }
+      }
+
+      // handle logout
+      const logout = document.getElementById("logout-button");
+      logout.addEventListener("click", userLogout);
+
+      function userLogout(e) {
+        localStorage.clear();
+        window.location.pathname = "/memes";
+      }
+    </script>
+
+    <%- include("./partials/scripts.ejs") %>
+  </body>
+</html>

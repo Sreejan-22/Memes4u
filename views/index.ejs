@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body style="background-color: rgb(136, 98, 241)">
+    <div class="fixed-component">
+      <nav class="navbar" style="color: rgba(255, 255, 255, 0.959)">
+        <a class="navbar-brand text-light" style="font-size: 2rem" href="/memes"
+          >Memes4u</a
+        >
+      </nav>
+      <div class="d-flex" style="font-family: 'Hind', sans-serif">
+        <a
+          href="/create"
+          class="p-2 mr-1 text-light text-lg-start align-self-center"
+          id="create-button"
+          style="font-size: 1.2rem; text-decoration: none"
+          >Create</a
+        >
+        <a
+          href="/login"
+          class="p-1 mr-2 text-light text-lg-start align-self-center"
+          id="sign-in"
+          style="
+            border: 2px solid gold;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+          "
+          >Login/Sign Up</a
+        >
+        <div
+          class="dropdown"
+          style="
+            padding-top: 11px;
+            margin-right: 5px;
+            color: gold;
+            display: none;
+          "
+          id="dropdown-item"
+        >
+          <div
+            class="dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            current_user
+          </div>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" id="my-memes-button">My Memes</a>
+            <a class="dropdown-item" href="#" id="logout-button">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% function time(val) { %>
+    <!--  -->
+    <% let date = Date.parse(val.toString()); %>
+    <!--  -->
+    <% date = new Date(date); %>
+    <!--  -->
+    <% const now = new Date(); %>
+    <!--  -->
+    <% let diff = (now - date) / 1000; %>
+    <!--  -->
+    <% const monthNames = ["January", "February", "March", "April", "May",
+    "June", "July", "August", "September", "October", "November", "December"];
+    %>
+    <!--  -->
+    <% if(now.getFullYear() !== date.getFullYear()) { %>
+    <!--  -->
+    <% return (`${date.getDate()}th ${monthNames[date.getMonth()]}
+    ${date.getFullYear}`); %>
+    <!--  -->
+    <% } else { %> <% let day = date.getDate(); %>
+    <!--  -->
+    <% let month = date.getMonth(); %>
+    <!--  -->
+    <% let hours = date.getHours(); %>
+    <!--  -->
+    <% hours = hours < 10 ? "0" + hours : hours; %>
+    <!--  -->
+    <% %> <% let minutes = date.getMinutes(); %>
+    <!--  -->
+    <% minutes = minutes < 10 ? "0" + minutes : minutes ; %>
+    <!--  -->
+    <% if(hours > 12) { %>
+    <!--  -->
+    <% return (`${day}th ${monthNames[month]} at ${hours - 12}:${minutes} PM`);
+    %>
+    <!--  -->
+    <% } else { %>
+    <!--  -->
+    <% return(`${day}th ${monthNames[month]} at ${hours}:${minutes} AM`); %>
+    <!--  -->
+    <% } %>
+    <!--  -->
+    <% } %>
+    <!--  -->
+    <% } %>
+
+    <!-- Meme Content -->
+
+    <div class="memes-wrapper">
+      <div class="all-memes">
+        <% if(memes.length > 0) { %> <% memes.forEach((meme) => { %>
+        <div class="meme-container">
+          <div class="meme-owner">
+            <p>
+              <span style="font-size: 1.2em; font-weight: bold"
+                ><%= meme.name %></span
+              >
+              <br class="line-break" />
+              <span class="dot" style="color: rgb(91, 112, 131)">&#8226;</span>
+              <span class="time-text" style="color: rgb(91, 112, 131)"
+                ><%= time(meme.createdAt) %></span
+              >
+            </p>
+          </div>
+          <div class="meme-caption"><p><%= meme.caption %></p></div>
+          <img src="<%= meme.url %>" alt="" class="meme-img" />
+        </div>
+        <hr />
+        <% }) %> <% } %>
+        <!-- <i class="far fa-heart"></i> -->
+        <!-- <i class="fas fa-heart"></i> -->
+      </div>
+    </div>
+
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+      const singinButton = document.getElementById("sign-in");
+      const dropdown = document.getElementById("dropdown-item");
+      // check if the user is logged in and handle the ui accordingly
+      if (localStorage.getItem("token") !== null) {
+        // display the username of the current user
+        // const singinButton = document.getElementById("sign-in");
+        singinButton.style.display = "none";
+        // const dropdown = document.getElementById("dropdown-item");
+        dropdown.style.display = "block";
+        const showUser = document.getElementById("dropdownMenuButton");
+        showUser.innerText = localStorage.getItem("username");
+
+        // show my memes  => memes posted by the user currently logged in/
+        const myMemesButton = document.getElementById("my-memes-button");
+        myMemesButton.addEventListener("click", showMyMemes);
+
+        function showMyMemes(e) {
+          const username = localStorage.getItem("username");
+          // const params = `?username=${username}`;
+          myMemesButton.setAttribute("href", `/mymemes/${username}`);
+        }
+
+        // handle logout
+        const logout = document.getElementById("logout-button");
+        logout.addEventListener("click", userLogout);
+
+        function userLogout(e) {
+          localStorage.clear();
+          window.location.reload();
+        }
+      } else {
+        singinButton.style.display = "inline";
+        dropdown.style.display = "none";
+      }
+    </script>
+
+    <%- include("./partials/scripts.ejs") %>
+  </body>
+</html>

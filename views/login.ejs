@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body style="background-color: rgb(136, 98, 241)">
+    <div class="head-container">
+      <nav
+        class="navbar"
+        style="
+          color: rgba(255, 255, 255, 0.959);
+          background-color: rgb(0, 0, 124);
+        "
+      >
+        <a class="navbar-brand text-light" style="font-size: 2rem" href="/memes"
+          >Memes4u</a
+        >
+      </nav>
+    </div>
+
+    <br /><br /><br /><br />
+
+    <div class="form-container d-flex flex-column align-items-center">
+      <form
+        style="width: 30%; background-color: white"
+        class="form-class p-4"
+        id="login-form"
+      >
+        <div class="form-group pt-3">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            placeholder="Enter username"
+            class="form-control"
+            id="username"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Enter password"
+            class="form-control"
+            id="password"
+          />
+        </div>
+        <div class="form-group d-flex flex-column align-items-center pb-4">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <p style="text-align: center">
+          New User? <a href="/signup">Sign Up</a>
+        </p>
+      </form>
+    </div>
+
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+      const form = document.getElementById("login-form");
+      form.addEventListener("submit", userLogin);
+
+      async function userLogin(e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }).then((res) => res.json());
+
+        if (response.status === "ok") {
+          localStorage.setItem("username", response.username);
+          localStorage.setItem("token", response.token);
+          window.location.pathname = "/";
+        } else if ("error" in response) {
+          alert(response.error);
+          window.location.reload();
+        }
+      }
+    </script>
+
+    <%- include("./partials/scripts.ejs") %>
+  </body>
+</html>

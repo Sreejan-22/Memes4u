@@ -1,0 +1,118 @@
+.fixed-component {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  background-color: rgb(0, 0, 124);
+  color: rgba(255, 255, 255, 0.959);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.head-container {
+  width: 100%;
+  font-family: "Reggae One", cursive;
+}
+
+.head-text {
+  margin: 15px;
+}
+
+.fixed-component {
+  font-family: "Reggae One", cursive;
+}
+/* .input-form {
+  width: 100%;
+  margin: 15px;
+} */
+
+/* .input-box {
+  width: 40%;
+} */
+.form-class {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+    rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  border-radius: 15px;
+}
+
+.create-form {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+    rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  border-radius: 15px;
+}
+
+.memes-wrapper {
+  position: relative;
+  top: 8rem;
+  /* z-index: 1; */
+}
+
+.all-memes {
+  /* z-index: -1; */
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meme-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+  width: 40%;
+  /* border: 2px solid white; */
+  /* border-radius: 25px; */
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+    rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  background-color: white;
+}
+
+/* .meme-owner {
+  margin-left: 20px;
+} */
+
+/* .meme-caption {
+  margin-left: 20px;
+} */
+
+.meme-img {
+  padding: 10px;
+  border-radius: 25px;
+  /* border: 2px solid rgba(255, 255, 255, 0.884); */
+}
+
+/* button > * {
+  pointer-events: none;
+} */
+
+.line-break {
+  display: none;
+}
+
+@media only screen and (max-width: 992px) {
+  .meme-container {
+    width: 75%;
+  }
+  .meme-owner {
+    margin-left: 1px;
+  }
+  .meme-caption {
+    margin-left: 1px;
+  }
+  .line-break {
+    display: block;
+  }
+  .dot {
+    display: none;
+  }
+  .form-class {
+    width: 70% !important;
+  }
+  .create-form {
+    width: 85% !important;
+  }
+}
